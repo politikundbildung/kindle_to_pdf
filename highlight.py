@@ -49,7 +49,7 @@ for page in doc:
 print(str(len(match)) + " instances highlighted in pdf")
 
 # save to a new PDF at the end after annotating everything
-doc.save(filename + "_annotated")
+doc.save(filename.rsplit( ".", 1 )[ 0 ] + "_annotated.pdf")
 
 #Find the items that were not annotated by comparing text_list against match
 print("These quotes could not be highlighted in the PDF:\n")
