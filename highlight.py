@@ -43,8 +43,8 @@ match = []
 # Iterate over each page in the PDF and search for each highlight in the list
 for page in doc:
     for text in text_list:
-        # Use fuzzywuzzy.get_close_matches to find close matches to the highlight text
-        close_matches = find_near_matches(text, page.get_text(),max_l_dist=10)
+        # Use fuzzysearch find_near_matches to find close matches to the highlight text
+        close_matches = find_near_matches(text, page.get_text(),max_l_dist=15)
         matched_substrings = [match.matched for match in close_matches]
         # Iterate over the close matches and add a highlight annotation for each one
         for matched in matched_substrings:
@@ -63,4 +63,4 @@ doc.save(filename.rsplit( ".", 1 )[ 0 ] + "_annotated.pdf")
 #Find the items that were not annotated by comparing text_list against match
 #Since the implementation of fuzzy search there's a problem with matches containing newlines (\n). Even if they are listed here, they are annotated in the text.
 print("These quotes could not be highlighted in the PDF:\n")
-print(set(text_list) ^ set(match))
+print(set(text_list) ^ set(filter(lambda x: not re.search(r'\n', x), match)))
