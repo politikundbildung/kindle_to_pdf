@@ -37,30 +37,31 @@ print(str(len(text_list)) + " highlights found in clippings")
 #Load Document
 doc = fitz.open(filename)
 
-# Initiate list for results found by page.search_for
-match = []
+# Initiatlize list of matches
+matches = []
 
 # Iterate over each page in the PDF and search for each highlight in the list
 for page in doc:
     for text in text_list:
-        # Use fuzzysearch find_near_matches to find close matches to the highlight text
-        close_matches = find_near_matches(text, page.get_text(),max_l_dist=15)
-        matched_substrings = [match.matched for match in close_matches]
-        # Iterate over the close matches and add a highlight annotation for each one
-        for matched in matched_substrings:
-            rl = page.search_for(matched, quads = True)
+        matched_substrings = [match.matched for match in find_near_matches(text, page.get_text(),max_l_dist=15)]
+        if matched_substrings != []:
+            rl = page.search_for(matched_substrings[0], quads = True)
             page.add_highlight_annot(rl)
-            # Add the close matches to the match object
-            if rl != []:
-                match = match + [matched]
+            matches.append(text)
+    text_list = list(set(text_list) - set(matches))
 
 # Print how many matches were found
-print(str(len(match)) + " instances highlighted in pdf")
+print(str(len(matches)) + " instances highlighted in pdf")
 
 # save to a new PDF at the end after annotating everything
 doc.save(filename.rsplit( ".", 1 )[ 0 ] + "_annotated.pdf")
 
-#Find the items that were not annotated by comparing text_list against match
 #Since the implementation of fuzzy search there's a problem with matches containing newlines (\n). Even if they are listed here, they are annotated in the text.
-print("These quotes could not be highlighted in the PDF:\n")
-print(set(text_list) ^ set(filter(lambda x: not re.search(r'\n', x), match)))
+print("These quotes could not be highlighted in the PDF:")
+print(text_list)
+
+# Print how many matches were found
+#print(str(match) + " instances highlighted in pdf")
+
+# save to a new PDF at the end after annotating everything
+doc.save(filename.rsplit( ".", 1 )[ 0 ] + "_annotated.pdf")
