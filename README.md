@@ -5,4 +5,6 @@ Creates PDF annotations from Kindle clippings. My use case is: I have an e-book 
 To install the necessary modules run `python pip install pymupdf fuzzysearch`
 
 # Usage
-`python highlight.py document.pdf clippings.txt`. The first argument needs to be a PDF document of the book with a text layer. The second argument needs to be a txt-file which should only include clippings from the book. The script does not yet highlight all quotes from the Clippings (for example because it has problems with page breaks and certain special characters) but outputs all quotes that it did not highlight for manual highlighting.
+`python highlight.py document.pdf clippings.txt`
+
+The first argument needs to be a PDF document of the book with a text layer. The second argument needs to be a txt-file which should only include clippings from the book. The script does not yet highlight all quotes from the Clippings (for example because it has problems with page breaks and certain special characters) but outputs all quotes that it did not highlight for manual highlighting.
